@@ -1,0 +1,27 @@
+﻿<h2>Trang quản trị</h2>
+<button onclick="getPrivateData()">Get Private Data</button>
+<pre id="result"></pre>
+
+<script>
+    async function getPrivateData() {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            window.location.href = "/Home/Login";
+            return;
+        }
+
+        const res = await fetch('/api/private/data', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+
+        if (res.status === 401) {
+            alert("Phiên đăng nhập hết hạn! Vui lòng đăng nhập lại.");
+            localStorage.removeItem('accessToken');
+            window.location.href = "/Home/Login";
+            return;
+        }
+
+        const data = await res.json();
+        document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+    }
+</script>

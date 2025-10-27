@@ -1,0 +1,25 @@
+﻿<h2>Login</h2>
+<input id="username" placeholder="Username" />
+<input id="password" type="password" placeholder="Password" />
+<button onclick="login()">Đăng nhập</button>
+
+<script>
+    async function login() {
+        const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value
+            })
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            localStorage.setItem('accessToken', data.accessToken);
+            window.location.href = "/Home/Admin";
+        } else {
+            alert("Sai thông tin đăng nhập");
+        }
+    }
+</script>
